@@ -29,6 +29,7 @@ class RerankerFactory:
 
     _registry: dict[str, Type[BaseReranker]] = {
         "cross-encoder": CrossEncoderReranker,
+        "cross_encoder": CrossEncoderReranker,
         "llm": LLMReranker,
         "none": NoneReranker,
         "stub": NoneReranker,
