@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from libs.llm.base_llm import BaseLLM, ChatMessage, LLMResponse
+from libs.llm.openai_llm import _validate_messages
 
 
 class AzureLLM(BaseLLM):
@@ -11,8 +12,7 @@ class AzureLLM(BaseLLM):
     provider_name = "azure"
 
     def chat(self, messages: list[ChatMessage]) -> LLMResponse:
-        if not messages:
-            raise ValueError("messages must not be empty")
+        _validate_messages(self.provider_name, messages)
         return LLMResponse(
             content=f"[azure:{self.model}] {messages[-1].content}",
             raw={"provider": self.provider_name, "message_count": len(messages)},

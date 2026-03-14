@@ -11,9 +11,21 @@ class OpenAILLM(BaseLLM):
     provider_name = "openai"
 
     def chat(self, messages: list[ChatMessage]) -> LLMResponse:
-        if not messages:
-            raise ValueError("messages must not be empty")
+        _validate_messages(self.provider_name, messages)
         return LLMResponse(
             content=f"[openai:{self.model}] {messages[-1].content}",
             raw={"provider": self.provider_name, "message_count": len(messages)},
         )
+
+
+def _validate_messages(provider: str, messages: list[ChatMessage]) -> None:
+    if not messages:
+        raise ValueError(f"{provider}: validation_error: messages must not be empty")
+
+    for index, message in enumerate(messages):
+        if not isinstance(message, ChatMessage):
+            raise TypeError(f"{provider}: validation_error: message[{index}] must be ChatMessage")
+        if not message.role.strip():
+            raise ValueError(f"{provider}: validation_error: message[{index}].role must not be empty")
+        if not message.content.strip():
+            raise ValueError(f"{provider}: validation_error: message[{index}].content must not be empty")
