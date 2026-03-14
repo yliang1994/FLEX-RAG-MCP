@@ -18,6 +18,10 @@ def test_load_settings_reads_minimal_config(tmp_path: Path) -> None:
                 "embedding:",
                 "  provider: stub",
                 "  model: stub-embedding",
+                "splitter:",
+                "  method: recursive",
+                "  chunk_size: 500",
+                "  chunk_overlap: 50",
                 "vector_store:",
                 "  backend: chroma",
                 "  persist_path: ./data/db/chroma",
@@ -45,6 +49,7 @@ def test_load_settings_reads_minimal_config(tmp_path: Path) -> None:
     settings = load_settings(config_path)
 
     assert settings.llm.provider == "stub"
+    assert settings.splitter.method == "recursive"
     assert settings.retrieval.top_k_final == 10
     assert settings.observability.enabled is True
 
@@ -60,6 +65,10 @@ def test_load_settings_reports_missing_field(tmp_path: Path) -> None:
                 "embedding:",
                 "  provider: ''",
                 "  model: stub-embedding",
+                "splitter:",
+                "  method: recursive",
+                "  chunk_size: 500",
+                "  chunk_overlap: 50",
                 "vector_store:",
                 "  backend: chroma",
                 "  persist_path: ./data/db/chroma",

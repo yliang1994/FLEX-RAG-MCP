@@ -22,6 +22,7 @@ def _settings_with_embedding(provider: str, model: str) -> Settings:
     return Settings(
         llm=base.llm,
         embedding=EmbeddingSettings(provider=provider, model=model),
+        splitter=base.splitter,
         vector_store=base.vector_store,
         retrieval=base.retrieval,
         rerank=base.rerank,

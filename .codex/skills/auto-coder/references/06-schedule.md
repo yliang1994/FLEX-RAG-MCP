@@ -51,7 +51,7 @@
 |---------|---------|------|---------|------|
 | B1 | LLM 抽象接口与工厂 | [x] | 2026-03-14 | 已实现 BaseLLM、默认 provider 占位实现与工厂路由 |
 | B2 | Embedding 抽象接口与工厂 | [x] | 2026-03-14 | 已实现 BaseEmbedding、默认 provider 占位实现与工厂路由 |
-| B3 | Splitter 抽象接口与工厂 | [ ] | | |
+| B3 | Splitter 抽象接口与工厂 | [x] | 2026-03-14 | 已补齐 splitter 配置、抽象接口、三种默认策略与工厂路由 |
 | B4 | VectorStore 抽象接口与工厂 | [ ] | | |
 | B5 | Reranker 抽象接口与工厂（含 None 回退） | [ ] | | |
 | B6 | Evaluator 抽象接口与工厂 | [ ] | | |

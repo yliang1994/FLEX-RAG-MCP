@@ -18,6 +18,7 @@ def test_llm_factory_routes_from_settings_object() -> None:
     settings = Settings(
         llm=LLMSettings(provider="openai", model="gpt-test", api_key="secret"),
         embedding=load_settings("config/settings.yaml").embedding,
+        splitter=load_settings("config/settings.yaml").splitter,
         vector_store=load_settings("config/settings.yaml").vector_store,
         retrieval=load_settings("config/settings.yaml").retrieval,
         rerank=load_settings("config/settings.yaml").rerank,

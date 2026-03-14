@@ -25,6 +25,13 @@ class EmbeddingSettings:
 
 
 @dataclass(slots=True)
+class SplitterSettings:
+    method: str
+    chunk_size: int
+    chunk_overlap: int
+
+
+@dataclass(slots=True)
 class VectorStoreSettings:
     backend: str
     persist_path: str
@@ -62,6 +69,7 @@ class ObservabilitySettings:
 class Settings:
     llm: LLMSettings
     embedding: EmbeddingSettings
+    splitter: SplitterSettings
     vector_store: VectorStoreSettings
     retrieval: RetrievalSettings
     rerank: RerankSettings
@@ -131,6 +139,9 @@ def validate_settings(settings: Settings) -> None:
         ("llm.model", settings.llm.model),
         ("embedding.provider", settings.embedding.provider),
         ("embedding.model", settings.embedding.model),
+        ("splitter.method", settings.splitter.method),
+        ("splitter.chunk_size", settings.splitter.chunk_size),
+        ("splitter.chunk_overlap", settings.splitter.chunk_overlap),
         ("vector_store.backend", settings.vector_store.backend),
         ("vector_store.persist_path", settings.vector_store.persist_path),
         ("retrieval.sparse_backend", settings.retrieval.sparse_backend),
@@ -154,6 +165,7 @@ def load_settings(path: str | Path) -> Settings:
         settings = Settings(
             llm=LLMSettings(**raw["llm"]),
             embedding=EmbeddingSettings(**raw["embedding"]),
+            splitter=SplitterSettings(**raw["splitter"]),
             vector_store=VectorStoreSettings(**raw["vector_store"]),
             retrieval=RetrievalSettings(**raw["retrieval"]),
             rerank=RerankSettings(**raw["rerank"]),
