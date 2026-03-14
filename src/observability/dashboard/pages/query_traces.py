@@ -1,0 +1,1 @@
+"""Placeholder query traces page."""

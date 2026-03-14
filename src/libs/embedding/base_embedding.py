@@ -1,0 +1,1 @@
+"""Placeholder embedding base class."""

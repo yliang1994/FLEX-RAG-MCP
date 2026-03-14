@@ -1,0 +1,1 @@
+"""Placeholder Ollama embedding provider."""

@@ -1,0 +1,1 @@
+"""Placeholder OpenAI embedding provider."""

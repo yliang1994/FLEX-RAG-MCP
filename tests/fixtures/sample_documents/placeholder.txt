@@ -1,0 +1,1 @@
+Sample fixture placeholder for future ingestion tests.

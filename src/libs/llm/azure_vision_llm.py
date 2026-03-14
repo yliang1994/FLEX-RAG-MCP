@@ -1,0 +1,1 @@
+"""Placeholder Azure vision provider."""

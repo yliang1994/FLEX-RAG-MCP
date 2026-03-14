@@ -1,0 +1,4 @@
+Rewrite the input chunk into a cleaner, self-contained passage.
+
+Input:
+{text}

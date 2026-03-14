@@ -1,0 +1,1 @@
+"""Placeholder Azure embedding provider."""

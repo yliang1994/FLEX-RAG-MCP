@@ -1,0 +1,1 @@
+"""Placeholder Chroma vector store."""
