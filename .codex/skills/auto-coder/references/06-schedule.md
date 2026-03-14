@@ -63,7 +63,7 @@
 | B7.6 | ChromaStore 默认实现 | [x] | 2026-03-14 | 已支持最小 JSON 持久化与 upsert-query roundtrip 集成测试 |
 | B7.7 | LLM Reranker 实现 | [x] | 2026-03-14 | 已支持 prompt 读取、结构化 ranked_ids 校验与 fallback 信号 |
 | B7.8 | Cross-Encoder Reranker 实现 | [x] | 2026-03-14 | 已支持 mock scorer、backend alias 与 fallback 信号 |
-| B8 | Vision LLM 抽象接口与工厂集成 | [ ] | | |
+| B8 | Vision LLM 抽象接口与工厂集成 | [x] | 2026-03-14 | 已实现 BaseVisionLLM、Azure 占位 Vision provider 与工厂路由 |
 | B9 | Azure Vision LLM 实现 | [ ] | | |
 
 #### 阶段 C：Ingestion Pipeline MVP
