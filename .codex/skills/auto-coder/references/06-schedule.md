@@ -57,7 +57,7 @@
 | B6 | Evaluator 抽象接口与工厂 | [x] | 2026-03-14 | 已实现 BaseEvaluator、Custom/Ragas 占位实现与工厂路由 |
 | B7.1 | OpenAI-Compatible LLM 实现 | [x] | 2026-03-14 | 已补齐 OpenAI/Azure/DeepSeek 输入校验与 smoke 测试 |
 | B7.2 | Ollama LLM 实现 | [x] | 2026-03-14 | 已支持本地 endpoint 配置、可读错误与 mock transport 测试 |
-| B7.3 | OpenAI & Azure Embedding 实现 | [ ] | | |
+| B7.3 | OpenAI & Azure Embedding 实现 | [x] | 2026-03-14 | 已补齐 OpenAI/Azure embedding 输入校验与 smoke 测试 |
 | B7.4 | Ollama Embedding 实现 | [ ] | | |
 | B7.5 | Recursive Splitter 默认实现 | [ ] | | |
 | B7.6 | ChromaStore 默认实现 | [ ] | | |
