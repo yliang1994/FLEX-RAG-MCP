@@ -61,7 +61,7 @@
 | B7.4 | Ollama Embedding 实现 | [x] | 2026-03-14 | 已支持本地 endpoint 配置、批量 embed 与 mock transport 测试 |
 | B7.5 | Recursive Splitter 默认实现 | [x] | 2026-03-14 | 已增强 Markdown block 解析，支持标题与 fenced code block 保持完整 |
 | B7.6 | ChromaStore 默认实现 | [x] | 2026-03-14 | 已支持最小 JSON 持久化与 upsert-query roundtrip 集成测试 |
-| B7.7 | LLM Reranker 实现 | [ ] | | |
+| B7.7 | LLM Reranker 实现 | [x] | 2026-03-14 | 已支持 prompt 读取、结构化 ranked_ids 校验与 fallback 信号 |
 | B7.8 | Cross-Encoder Reranker 实现 | [ ] | | |
 | B8 | Vision LLM 抽象接口与工厂集成 | [ ] | | |
 | B9 | Azure Vision LLM 实现 | [ ] | | |
