@@ -1,0 +1,26 @@
+[
+  {
+    "id": "doc-a",
+    "text": "gamma",
+    "vector": [
+      1.0,
+      1.0
+    ],
+    "metadata": {
+      "collection": "keep",
+      "lang": "zh"
+    }
+  },
+  {
+    "id": "doc-b",
+    "text": "delta",
+    "vector": [
+      1.0,
+      -1.0
+    ],
+    "metadata": {
+      "collection": "drop",
+      "lang": "en"
+    }
+  }
+]
