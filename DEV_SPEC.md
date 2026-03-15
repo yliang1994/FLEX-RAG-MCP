@@ -1987,7 +1987,7 @@ dashboard:
 | C5 | Transform 基类 + ChunkRefiner | [x] | 2026-03-15 | 已实现 BaseTransform、规则/LLM 双模 ChunkRefiner、最小 TraceContext 与降级测试 |
 | C6 | MetadataEnricher | [x] | 2026-03-15 | 已实现规则/LLM 双模 metadata enrich、JSON 解析降级与契约测试 |
 | C7 | ImageCaptioner | [x] | 2026-03-15 | 已实现 Vision caption 生成、提示词加载与非阻塞 fallback 测试 |
-| C8 | DenseEncoder | [ ] | | |
+| C8 | DenseEncoder | [x] | 2026-03-15 | 已实现批量 dense 编码、ChunkRecord 贴回与 trace 摘要测试 |
 | C9 | SparseEncoder | [ ] | | |
 | C10 | BatchProcessor | [ ] | | |
 | C11 | BM25Indexer（倒排索引+IDF计算） | [ ] | | |
