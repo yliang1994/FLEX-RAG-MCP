@@ -1993,7 +1993,7 @@ dashboard:
 | C11 | BM25Indexer（倒排索引+IDF计算） | [x] | 2026-03-15 | 已实现 JSON 持久化倒排索引、IDF 计算、查询与增量更新测试 |
 | C12 | VectorUpserter（幂等upsert） | [x] | 2026-03-15 | 已实现稳定向量 ID、批量 upsert、幂等性与 trace 测试 |
 | C13 | ImageStorage（图片存储+SQLite索引） | [x] | 2026-03-15 | 已实现图片文件存储、SQLite 映射持久化与重载测试 |
-| C14 | Pipeline 编排（MVP 串起来） | [ ] | | |
+| C14 | Pipeline 编排（MVP 串起来） | [x] | 2026-03-15 | 已实现串行 ingestion pipeline、跳过机制与端到端集成测试 |
 | C15 | 脚本入口 ingest.py | [ ] | | |
 
 #### 阶段 D：Retrieval MVP
