@@ -39,3 +39,5 @@ observability:
 ingestion:
   chunk_refiner:
     use_llm: false
+  metadata_enricher:
+    use_llm: false

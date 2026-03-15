@@ -71,8 +71,14 @@ class ChunkRefinerSettings:
 
 
 @dataclass(slots=True)
+class MetadataEnricherSettings:
+    use_llm: bool = False
+
+
+@dataclass(slots=True)
 class IngestionSettings:
     chunk_refiner: ChunkRefinerSettings = field(default_factory=ChunkRefinerSettings)
+    metadata_enricher: MetadataEnricherSettings = field(default_factory=MetadataEnricherSettings)
 
 
 @dataclass(slots=True)
@@ -185,7 +191,10 @@ def load_settings(path: str | Path) -> Settings:
             ingestion=IngestionSettings(
                 chunk_refiner=ChunkRefinerSettings(
                     **raw.get("ingestion", {}).get("chunk_refiner", {})
-                )
+                ),
+                metadata_enricher=MetadataEnricherSettings(
+                    **raw.get("ingestion", {}).get("metadata_enricher", {})
+                ),
             ),
         )
     except KeyError as exc:

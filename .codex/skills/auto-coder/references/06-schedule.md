@@ -75,7 +75,7 @@
 | C3 | Loader 抽象基类与 PDF Loader | [x] | 2026-03-15 | 已实现 BaseLoader、最小 PdfLoader 壳子与图片占位符/metadata 测试 |
 | C4 | Splitter 集成（调用 Libs） | [x] | 2026-03-15 | 已实现 DocumentChunker、稳定 chunk id 与图片按需分发测试 |
 | C5 | Transform 基类 + ChunkRefiner | [x] | 2026-03-15 | 已实现 BaseTransform、规则/LLM 双模 ChunkRefiner、最小 TraceContext 与降级测试 |
-| C6 | MetadataEnricher | [ ] | | |
+| C6 | MetadataEnricher | [x] | 2026-03-15 | 已实现规则/LLM 双模 metadata enrich、JSON 解析降级与契约测试 |
 | C7 | ImageCaptioner | [ ] | | |
 | C8 | DenseEncoder | [ ] | | |
 | C9 | SparseEncoder | [ ] | | |
