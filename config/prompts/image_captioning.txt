@@ -1,1 +1,5 @@
-Describe the image in enough detail to support retrieval.
+Describe the image identified by {image_id} in the context of this chunk.
+Return one concise caption sentence that helps retrieval.
+
+Chunk context:
+{text}

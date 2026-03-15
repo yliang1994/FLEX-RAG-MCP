@@ -76,9 +76,15 @@ class MetadataEnricherSettings:
 
 
 @dataclass(slots=True)
+class ImageCaptionerSettings:
+    enabled: bool = False
+
+
+@dataclass(slots=True)
 class IngestionSettings:
     chunk_refiner: ChunkRefinerSettings = field(default_factory=ChunkRefinerSettings)
     metadata_enricher: MetadataEnricherSettings = field(default_factory=MetadataEnricherSettings)
+    image_captioner: ImageCaptionerSettings = field(default_factory=ImageCaptionerSettings)
 
 
 @dataclass(slots=True)
@@ -194,6 +200,9 @@ def load_settings(path: str | Path) -> Settings:
                 ),
                 metadata_enricher=MetadataEnricherSettings(
                     **raw.get("ingestion", {}).get("metadata_enricher", {})
+                ),
+                image_captioner=ImageCaptionerSettings(
+                    **raw.get("ingestion", {}).get("image_captioner", {})
                 ),
             ),
         )
