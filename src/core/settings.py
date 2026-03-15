@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -66,6 +66,16 @@ class ObservabilitySettings:
 
 
 @dataclass(slots=True)
+class ChunkRefinerSettings:
+    use_llm: bool = False
+
+
+@dataclass(slots=True)
+class IngestionSettings:
+    chunk_refiner: ChunkRefinerSettings = field(default_factory=ChunkRefinerSettings)
+
+
+@dataclass(slots=True)
 class Settings:
     llm: LLMSettings
     embedding: EmbeddingSettings
@@ -75,6 +85,7 @@ class Settings:
     rerank: RerankSettings
     evaluation: EvaluationSettings
     observability: ObservabilitySettings
+    ingestion: IngestionSettings = field(default_factory=IngestionSettings)
 
 
 def _parse_scalar(raw: str) -> Any:
@@ -171,6 +182,11 @@ def load_settings(path: str | Path) -> Settings:
             rerank=RerankSettings(**raw["rerank"]),
             evaluation=EvaluationSettings(**raw["evaluation"]),
             observability=ObservabilitySettings(**raw["observability"]),
+            ingestion=IngestionSettings(
+                chunk_refiner=ChunkRefinerSettings(
+                    **raw.get("ingestion", {}).get("chunk_refiner", {})
+                )
+            ),
         )
     except KeyError as exc:
         raise SettingsError(f"Missing required section: {exc.args[0]}") from exc

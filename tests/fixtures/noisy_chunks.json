@@ -1,0 +1,50 @@
+[
+  {
+    "name": "typical_noise_scenario",
+    "input": "Company Handbook\nPage 1 of 3\n\nThis   is   a   paragraph.\n\nThis   is   a   paragraph.\n\n---\nFooter",
+    "expected_contains": ["Company Handbook", "This is a paragraph.", "Footer"],
+    "expected_absent": ["Page 1 of 3", "---", "This   is   a   paragraph."]
+  },
+  {
+    "name": "ocr_errors",
+    "input": "Scanned   text with   uneven   spacing and  broken words.",
+    "expected_contains": ["Scanned text with uneven spacing and broken words."],
+    "expected_absent": ["   "]
+  },
+  {
+    "name": "page_header_footer",
+    "input": "Quarterly Report\nPage 2\nRevenue increased.\nQuarterly Report\nPage 2",
+    "expected_contains": ["Quarterly Report", "Revenue increased."],
+    "expected_absent": ["Page 2\nPage 2"]
+  },
+  {
+    "name": "excessive_whitespace",
+    "input": "Line one.\n\n\n\nLine two.\t\tLine three.",
+    "expected_contains": ["Line one.", "Line two. Line three."],
+    "expected_absent": ["\n\n\n", "\t"]
+  },
+  {
+    "name": "format_markers",
+    "input": "<!-- hidden -->\nVisible text\n![alt](image.png)\n***",
+    "expected_contains": ["Visible text"],
+    "expected_absent": ["hidden", "![alt](image.png)", "***"]
+  },
+  {
+    "name": "clean_text",
+    "input": "A clean paragraph with useful context.\n\nAnother sentence follows.",
+    "expected_contains": ["A clean paragraph with useful context.", "Another sentence follows."],
+    "expected_absent": []
+  },
+  {
+    "name": "code_blocks",
+    "input": "Explanation\n\n```python\nif value  >  1:\n    print(value)\n```\n\nPage 4",
+    "expected_contains": ["Explanation", "```python\nif value  >  1:\n    print(value)\n```"],
+    "expected_absent": ["Page 4"]
+  },
+  {
+    "name": "mixed_noise",
+    "input": "Title\n====\nPage 9 of 9\n\n<section>\nImportant   content.\n</section>\n<!-- note -->\n\n```js\nconst x = 1;\n```",
+    "expected_contains": ["Title", "<section>", "Important content.", "</section>", "```js\nconst x = 1;\n```"],
+    "expected_absent": ["Page 9 of 9", "<!-- note -->", "===="]
+  }
+]
