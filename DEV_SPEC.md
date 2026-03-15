@@ -1982,7 +1982,7 @@ dashboard:
 |---------|---------|------|---------|------|
 | C1 | 定义核心数据类型/契约（Document/Chunk/ChunkRecord） | [x] | 2026-03-15 | 已补齐 Document/Chunk/ChunkRecord/ImageRef/RetrievalResult 契约与序列化测试 |
 | C2 | 文件完整性检查（SHA256） | [x] | 2026-03-15 | 已实现 SQLiteIntegrityChecker、WAL 初始化与 SHA256/状态流转测试 |
-| C3 | Loader 抽象基类与 PDF Loader | [ ] | | |
+| C3 | Loader 抽象基类与 PDF Loader | [x] | 2026-03-15 | 已实现 BaseLoader、最小 PdfLoader 壳子与图片占位符/metadata 测试 |
 | C4 | Splitter 集成（调用 Libs） | [ ] | | |
 | C5 | Transform 基类 + ChunkRefiner | [ ] | | |
 | C6 | MetadataEnricher | [ ] | | |
