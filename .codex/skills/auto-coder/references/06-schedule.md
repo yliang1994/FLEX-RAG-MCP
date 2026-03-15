@@ -81,7 +81,7 @@
 | C9 | SparseEncoder | [x] | 2026-03-15 | 已实现 BM25 友好的 term weight 输出、空文本行为与 trace 测试 |
 | C10 | BatchProcessor | [x] | 2026-03-15 | 已实现稳定分批、dense/sparse 合并与批次 trace 测试 |
 | C11 | BM25Indexer（倒排索引+IDF计算） | [x] | 2026-03-15 | 已实现 JSON 持久化倒排索引、IDF 计算、查询与增量更新测试 |
-| C12 | VectorUpserter（幂等upsert） | [ ] | | |
+| C12 | VectorUpserter（幂等upsert） | [x] | 2026-03-15 | 已实现稳定向量 ID、批量 upsert、幂等性与 trace 测试 |
 | C13 | ImageStorage（图片存储+SQLite索引） | [ ] | | |
 | C14 | Pipeline 编排（MVP 串起来） | [ ] | | |
 | C15 | 脚本入口 ingest.py | [ ] | | |
