@@ -1990,7 +1990,7 @@ dashboard:
 | C8 | DenseEncoder | [x] | 2026-03-15 | 已实现批量 dense 编码、ChunkRecord 贴回与 trace 摘要测试 |
 | C9 | SparseEncoder | [x] | 2026-03-15 | 已实现 BM25 友好的 term weight 输出、空文本行为与 trace 测试 |
 | C10 | BatchProcessor | [x] | 2026-03-15 | 已实现稳定分批、dense/sparse 合并与批次 trace 测试 |
-| C11 | BM25Indexer（倒排索引+IDF计算） | [ ] | | |
+| C11 | BM25Indexer（倒排索引+IDF计算） | [x] | 2026-03-15 | 已实现 JSON 持久化倒排索引、IDF 计算、查询与增量更新测试 |
 | C12 | VectorUpserter（幂等upsert） | [ ] | | |
 | C13 | ImageStorage（图片存储+SQLite索引） | [ ] | | |
 | C14 | Pipeline 编排（MVP 串起来） | [ ] | | |
