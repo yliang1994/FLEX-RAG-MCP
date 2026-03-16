@@ -93,7 +93,7 @@
 | D1 | QueryProcessor（关键词提取 + filters） | [x] | 2026-03-16 | 已实现规则版关键词提取、内联 filters 解析与单元测试 |
 | D2 | DenseRetriever（调用 VectorStore.query） | [x] | 2026-03-16 | 已实现 embedding→vector store 编排、结果规范化与单元测试 |
 | D3 | SparseRetriever（BM25 查询） | [x] | 2026-03-16 | 已实现 BM25→vector payload join、get_by_ids 契约与单元测试 |
-| D4 | RRF Fusion | [ ] | | |
+| D4 | RRF Fusion | [x] | 2026-03-16 | 已实现 Reciprocal Rank Fusion、去重排序与单元测试 |
 | D5 | HybridSearch 编排 | [ ] | | |
 | D6 | Reranker（Core 层编排 + Fallback） | [ ] | | |
 | D7 | 脚本入口 query.py（查询可用） | [ ] | | |
