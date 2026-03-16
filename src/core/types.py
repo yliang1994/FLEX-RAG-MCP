@@ -82,3 +82,13 @@ class RetrievalResult:
     score: float
     text: str
     metadata: MetadataDict = field(default_factory=dict)
+
+
+@dataclass(slots=True)
+class ProcessedQuery:
+    """Normalized query payload produced by the query pre-processing stage."""
+
+    query: str
+    normalized_query: str
+    keywords: list[str] = field(default_factory=list)
+    filters: MetadataDict = field(default_factory=dict)

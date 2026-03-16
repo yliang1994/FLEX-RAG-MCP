@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 
-from core import Chunk, ChunkRecord, Document, ImageRef, RetrievalResult
+from core import Chunk, ChunkRecord, Document, ImageRef, ProcessedQuery, RetrievalResult
 
 
 def test_document_and_image_refs_are_serializable() -> None:
@@ -70,4 +70,22 @@ def test_retrieval_result_is_serializable_with_metadata() -> None:
         "score": 0.95,
         "text": "answer text",
         "metadata": {"source_path": "docs/demo.pdf", "page": 3},
+    }
+
+
+def test_processed_query_is_serializable_with_filters() -> None:
+    query = ProcessedQuery(
+        query="collection:docs hybrid search",
+        normalized_query="hybrid search",
+        keywords=["hybrid", "search"],
+        filters={"collection": "docs"},
+    )
+
+    payload = asdict(query)
+
+    assert payload == {
+        "query": "collection:docs hybrid search",
+        "normalized_query": "hybrid search",
+        "keywords": ["hybrid", "search"],
+        "filters": {"collection": "docs"},
     }
