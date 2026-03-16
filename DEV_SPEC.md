@@ -2004,7 +2004,7 @@ dashboard:
 | D2 | DenseRetriever（调用 VectorStore.query） | [x] | 2026-03-16 | 已实现 embedding→vector store 编排、结果规范化与单元测试 |
 | D3 | SparseRetriever（BM25 查询） | [x] | 2026-03-16 | 已实现 BM25→vector payload join、get_by_ids 契约与单元测试 |
 | D4 | RRF Fusion | [x] | 2026-03-16 | 已实现 Reciprocal Rank Fusion、去重排序与单元测试 |
-| D5 | HybridSearch 编排 | [ ] | | |
+| D5 | HybridSearch 编排 | [x] | 2026-03-16 | 已实现 query→dense/sparse→fusion 编排、metadata 过滤与单路降级测试 |
 | D6 | Reranker（Core 层编排 + Fallback） | [ ] | | |
 | D7 | 脚本入口 query.py（查询可用） | [ ] | | |
 
