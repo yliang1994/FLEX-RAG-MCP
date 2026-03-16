@@ -62,6 +62,21 @@ class ChromaStore(BaseVectorStore):
         matches.sort(key=lambda item: item.score, reverse=True)
         return matches[:top_k]
 
+    def get_by_ids(self, ids: list[str], trace: Any | None = None) -> list[dict[str, Any]]:
+        records: list[dict[str, Any]] = []
+        for record_id in ids:
+            record = self._records.get(record_id)
+            if record is None:
+                continue
+            records.append(
+                {
+                    "id": record.id,
+                    "text": record.text,
+                    "metadata": record.metadata,
+                }
+            )
+        return records
+
     def _load_records(self) -> dict[str, VectorRecord]:
         if not self.data_file.exists():
             return {}

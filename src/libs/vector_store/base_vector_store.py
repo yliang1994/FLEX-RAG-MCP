@@ -30,3 +30,7 @@ class BaseVectorStore(ABC):
         trace: Any | None = None,
     ) -> list[QueryMatch]:
         """Return the top-k matches for the given vector."""
+
+    @abstractmethod
+    def get_by_ids(self, ids: list[str], trace: Any | None = None) -> list[dict[str, Any]]:
+        """Fetch stored records by id while preserving the requested payload fields."""

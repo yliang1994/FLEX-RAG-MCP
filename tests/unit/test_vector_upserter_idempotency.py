@@ -37,6 +37,9 @@ class FakeVectorStore(BaseVectorStore):
     def query(self, vector, top_k, filters=None, trace=None):  # type: ignore[override]
         raise NotImplementedError
 
+    def get_by_ids(self, ids, trace=None):  # type: ignore[override]
+        raise NotImplementedError
+
 
 def make_settings() -> Settings:
     return Settings(

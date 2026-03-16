@@ -51,6 +51,16 @@ class FakeVectorStore(BaseVectorStore):
             )
         ]
 
+    def get_by_ids(self, ids: list[str], trace: object | None = None) -> list[dict[str, object]]:
+        return [
+            {
+                "id": record_id,
+                "text": "dense result",
+                "metadata": {"collection": "kb", "page": 1},
+            }
+            for record_id in ids
+        ]
+
 
 class InvalidEmbedding(BaseEmbedding):
     provider_name = "invalid"

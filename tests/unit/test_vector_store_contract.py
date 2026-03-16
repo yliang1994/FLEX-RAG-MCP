@@ -39,6 +39,16 @@ class FakeVectorStore(BaseVectorStore):
             )
         ][:top_k]
 
+    def get_by_ids(self, ids: list[str], trace: object | None = None) -> list[dict[str, object]]:
+        return [
+            {
+                "id": record_id,
+                "text": "hello",
+                "metadata": {"collection": "unit"},
+            }
+            for record_id in ids
+        ]
+
 
 def _settings_with_vector_store(backend: str, persist_path: str) -> Settings:
     base = load_settings("config/settings.yaml")
