@@ -66,3 +66,28 @@ def test_response_builder_returns_friendly_message_when_no_results() -> None:
             "result_count": 0,
         },
     }
+
+
+def test_response_builder_appends_image_content_when_present(tmp_path) -> None:
+    image_path = tmp_path / "diagram.png"
+    image_path.write_bytes(b"fake-image-binary")
+    builder = ResponseBuilder()
+
+    response = builder.build(
+        [
+            RetrievalResult(
+                chunk_id="chunk-image",
+                score=0.91,
+                text="This section references an image.",
+                metadata={
+                    "source_path": "docs/diagram.pdf",
+                    "images": [{"id": "img-1", "path": str(image_path)}],
+                },
+            )
+        ],
+        query="show me the diagram",
+    )
+
+    assert response["content"][1]["type"] == "image"
+    assert response["content"][1]["mimeType"] == "image/png"
+    assert response["content"][1]["data"] == "ZmFrZS1pbWFnZS1iaW5hcnk="

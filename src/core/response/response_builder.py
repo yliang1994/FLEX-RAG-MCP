@@ -3,14 +3,20 @@
 from __future__ import annotations
 
 from core.response.citation_generator import CitationGenerator
+from core.response.multimodal_assembler import MultimodalAssembler
 from core.types import RetrievalResult
 
 
 class ResponseBuilder:
     """Format retrieval results into MCP text and structured content."""
 
-    def __init__(self, citation_generator: CitationGenerator | None = None) -> None:
+    def __init__(
+        self,
+        citation_generator: CitationGenerator | None = None,
+        multimodal_assembler: MultimodalAssembler | None = None,
+    ) -> None:
         self.citation_generator = citation_generator or CitationGenerator()
+        self.multimodal_assembler = multimodal_assembler or MultimodalAssembler()
 
     def build(self, retrieval_results: list[RetrievalResult], query: str) -> dict[str, object]:
         if not retrieval_results:
@@ -31,13 +37,16 @@ class ResponseBuilder:
 
         citations = self.citation_generator.generate(retrieval_results)
         markdown = self._build_markdown(retrieval_results, citations)
+        content: list[dict[str, object]] = [
+            {
+                "type": "text",
+                "text": markdown,
+            }
+        ]
+        content.extend(self.multimodal_assembler.assemble(retrieval_results))
+
         return {
-            "content": [
-                {
-                    "type": "text",
-                    "text": markdown,
-                }
-            ],
+            "content": content,
             "structuredContent": {
                 "query": query,
                 "citations": citations,
