@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from mcp_server.protocol_handler import ToolDefinition
+from mcp_server.protocol_handler import InvalidParamsError, ToolDefinition
+from mcp_server.tools.get_document_summary import get_document_summary
 from mcp_server.tools.list_collections import list_collections
 from mcp_server.tools.query_knowledge_hub import query_knowledge_hub
 
@@ -37,4 +38,25 @@ def get_registered_tools() -> list[ToolDefinition]:
             },
             handler=lambda arguments: list_collections(),
         ),
+        ToolDefinition(
+            name="get_document_summary",
+            description="Return title, summary, and tags for a stored document.",
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "doc_id": {"type": "string"},
+                },
+                "required": ["doc_id"],
+            },
+            handler=lambda arguments: _handle_get_document_summary(arguments),
+        ),
     ]
+
+
+def _handle_get_document_summary(arguments: dict[str, object]) -> dict[str, object]:
+    try:
+        return get_document_summary(doc_id=str(arguments["doc_id"]))
+    except KeyError as exc:
+        raise InvalidParamsError(f"missing required argument: {exc.args[0]}") from exc
+    except ValueError as exc:
+        raise InvalidParamsError(str(exc)) from exc

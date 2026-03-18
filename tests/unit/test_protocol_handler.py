@@ -220,3 +220,4 @@ def test_tools_list_includes_registered_mcp_tools() -> None:
     tool_names = [tool["name"] for tool in response["result"]["tools"]]
     assert "query_knowledge_hub" in tool_names
     assert "list_collections" in tool_names
+    assert "get_document_summary" in tool_names
