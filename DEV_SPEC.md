@@ -2012,8 +2012,8 @@ dashboard:
 
 | 任务编号 | 任务名称 | 状态 | 完成日期 | 备注 |
 |---------|---------|------|---------|------|
-| E1 | MCP Server 入口与 Stdio 约束 | [ ] | | |
-| E2 | Protocol Handler 协议解析与能力协商 | [ ] | | |
+| E1 | MCP Server 入口与 Stdio 约束 | [x] | 2026-03-18 | 已实现 stdio framing、initialize 握手与 stdout/stderr 隔离 |
+| E2 | Protocol Handler 协议解析与能力协商 | [x] | 2026-03-18 | 已实现 initialize/tools/list/tools/call 路由与 JSON-RPC 错误映射 |
 | E3 | query_knowledge_hub Tool | [ ] | | |
 | E4 | list_collections Tool | [ ] | | |
 | E5 | get_document_summary Tool | [ ] | | |
