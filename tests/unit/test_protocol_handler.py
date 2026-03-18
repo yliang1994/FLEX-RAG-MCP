@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from mcp_server.protocol_handler import ProtocolHandler, ToolDefinition
+from mcp_server.tools import get_registered_tools
 
 
 def _echo_tool(arguments: dict[str, object]) -> dict[str, object]:
@@ -201,3 +202,21 @@ def test_internal_tool_error_is_hidden_behind_internal_error() -> None:
             "message": "Internal error",
         },
     }
+
+
+def test_tools_list_includes_registered_mcp_tools() -> None:
+    handler = ProtocolHandler(tools=get_registered_tools())
+
+    response = handler.handle_request(
+        {
+            "jsonrpc": "2.0",
+            "id": 7,
+            "method": "tools/list",
+            "params": {},
+        }
+    )
+
+    assert response is not None
+    tool_names = [tool["name"] for tool in response["result"]["tools"]]
+    assert "query_knowledge_hub" in tool_names
+    assert "list_collections" in tool_names
