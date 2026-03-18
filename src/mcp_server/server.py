@@ -9,6 +9,7 @@ from typing import IO, Any
 
 from core.settings import Settings, load_settings
 from mcp_server.protocol_handler import ProtocolHandler
+from mcp_server.tools import get_registered_tools
 from observability.logger import get_logger
 
 
@@ -117,7 +118,10 @@ class MCPServer:
 
 def main() -> int:
     settings = load_settings("config/settings.yaml")
-    server = MCPServer(ServerContext(settings=settings))
+    server = MCPServer(
+        ServerContext(settings=settings),
+        protocol_handler=ProtocolHandler(tools=get_registered_tools()),
+    )
     return server.serve_forever()
 
 

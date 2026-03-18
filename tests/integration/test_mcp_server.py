@@ -97,3 +97,67 @@ def test_server_initialize_over_stdio_keeps_stdout_clean() -> None:
         if process.poll() is None:
             process.terminate()
             process.wait(timeout=5)
+
+
+@pytest.mark.integration
+def test_server_query_knowledge_hub_tool_returns_friendly_empty_response() -> None:
+    process = subprocess.Popen(
+        [sys.executable, "-m", "mcp_server.server"],
+        cwd=REPO_ROOT,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    try:
+        assert process.stdin is not None
+        assert process.stdout is not None
+
+        process.stdin.write(
+            _encode_message(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "initialize",
+                    "params": {
+                        "protocolVersion": "2024-11-05",
+                        "capabilities": {},
+                        "clientInfo": {"name": "pytest", "version": "0.0.0"},
+                    },
+                }
+            )
+        )
+        process.stdin.flush()
+        _read_message(process.stdout)
+
+        process.stdin.write(
+            _encode_message(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "query_knowledge_hub",
+                        "arguments": {
+                            "query": "hybrid retrieval",
+                            "top_k": 3,
+                        },
+                    },
+                }
+            )
+        )
+        process.stdin.flush()
+
+        response = _read_message(process.stdout)
+        assert response["jsonrpc"] == "2.0"
+        assert response["id"] == 2
+
+        result = response["result"]
+        assert result["content"][0]["type"] == "text"
+        assert "未找到相关文档" in result["content"][0]["text"]
+        assert result["structuredContent"]["citations"] == []
+        assert result["structuredContent"]["result_count"] == 0
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            process.wait(timeout=5)
