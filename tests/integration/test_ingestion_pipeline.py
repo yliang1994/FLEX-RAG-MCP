@@ -10,6 +10,8 @@ from libs.loader.file_integrity import SQLiteIntegrityChecker
 from libs.vector_store.chroma_store import ChromaStore
 from ingestion.storage.vector_upserter import VectorUpserter
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
 
 def test_ingestion_pipeline_runs_end_to_end(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.chdir(tmp_path)
@@ -21,7 +23,7 @@ def test_ingestion_pipeline_runs_end_to_end(tmp_path: Path, monkeypatch) -> None
         encoding="utf-8",
     )
 
-    settings = load_settings(Path("/home/yliang/remote_codex/MODULAR-RAG-MCP-SERVER/config/settings.yaml"))
+    settings = load_settings(REPO_ROOT / "config" / "settings.yaml")
     settings.vector_store.persist_path = str(tmp_path / "data" / "db" / "chroma")
 
     pipeline = IngestionPipeline(
@@ -39,6 +41,22 @@ def test_ingestion_pipeline_runs_end_to_end(tmp_path: Path, monkeypatch) -> None
     assert result.vector_ids
     assert result.bm25_terms > 0
     assert result.image_count == 1
+    assert result.trace is not None
+    assert result.trace.trace_type == "ingestion"
+    stage_names = [stage.name for stage in result.trace.stages]
+    top_level_stage_names = [name for name in stage_names if name in {"load", "split", "transform", "embed", "upsert"}]
+    assert top_level_stage_names == [
+        "load",
+        "split",
+        "transform",
+        "embed",
+        "upsert",
+    ]
+    top_level_stages = [stage for stage in result.trace.stages if stage.name in {"load", "split", "transform", "embed", "upsert"}]
+    assert all(stage.details["elapsed_ms"] >= 0 for stage in top_level_stages)
+    assert top_level_stages[0].details["method"] == "PdfLoader"
+    assert top_level_stages[1].details["chunk_count"] == result.chunk_count
+    assert top_level_stages[4].details["image_count"] == 1
     assert (tmp_path / "data" / "db" / "bm25" / "index.json").exists()
     assert (tmp_path / "data" / "db" / "chroma" / "records.json").exists()
 
@@ -48,7 +66,7 @@ def test_ingestion_pipeline_skips_unchanged_document(tmp_path: Path, monkeypatch
     document_path = tmp_path / "simple.pdf"
     document_path.write_text("Simple Title\n\nOne paragraph.", encoding="utf-8")
 
-    settings = load_settings(Path("/home/yliang/remote_codex/MODULAR-RAG-MCP-SERVER/config/settings.yaml"))
+    settings = load_settings(REPO_ROOT / "config" / "settings.yaml")
     settings.vector_store.persist_path = str(tmp_path / "data" / "db" / "chroma")
 
     pipeline = IngestionPipeline(
@@ -64,3 +82,6 @@ def test_ingestion_pipeline_skips_unchanged_document(tmp_path: Path, monkeypatch
 
     assert first.status == "ingested"
     assert second.status == "skipped"
+    assert second.trace is not None
+    assert second.trace.trace_type == "ingestion"
+    assert second.trace.stages[-1].name == "skip"
