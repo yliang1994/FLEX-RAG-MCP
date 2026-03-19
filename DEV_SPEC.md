@@ -2025,7 +2025,7 @@ dashboard:
 |---------|---------|------|---------|------|
 | F1 | TraceContext 增强（finish + 耗时统计 + trace_type） | [x] | 2026-03-19 | 已增强 trace_type/finish/to_dict/elapsed_ms，并补 TraceCollector 与单元测试 |
 | F2 | 结构化日志 logger（JSON Lines） | [x] | 2026-03-19 | 已实现 JSONFormatter/get_trace_logger/write_trace，并补 JSONL 单元测试 |
-| F3 | 在 Query 链路打点 | [ ] | | |
+| F3 | 在 Query 链路打点 | [x] | 2026-03-19 | 已补 query_processing/dense_retrieval/sparse_retrieval/fusion/rerank 阶段、method 与 elapsed_ms 测试 |
 | F4 | 在 Ingestion 链路打点 | [ ] | | |
 | F5 | Pipeline 进度回调 (on_progress) | [ ] | | |
 
@@ -2071,11 +2071,11 @@ dashboard:
 | 阶段 C | 15 | 15 | 100% |
 | 阶段 D | 7 | 7 | 100% |
 | 阶段 E | 6 | 6 | 100% |
-| 阶段 F | 5 | 2 | 40% |
+| 阶段 F | 5 | 3 | 60% |
 | 阶段 G | 6 | 0 | 0% |
 | 阶段 H | 5 | 0 | 0% |
 | 阶段 I | 5 | 0 | 0% |
-| **总计** | **68** | **49** | **72.1%** |
+| **总计** | **68** | **50** | **73.5%** |
 
 
 ---

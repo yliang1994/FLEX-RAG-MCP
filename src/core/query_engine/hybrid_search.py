@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from time import perf_counter
 from typing import Any
 
 from core.query_engine.dense_retriever import DenseRetriever
@@ -44,15 +45,27 @@ class HybridSearch:
         if top_k <= 0:
             raise ValueError("top_k must be positive")
 
+        query_start = perf_counter()
         processed = self.query_processor.process(query)
         combined_filters = dict(processed.filters)
         combined_filters.update(filters or {})
+        if trace is not None:
+            trace.record_stage(
+                "query_processing",
+                elapsed_ms=round((perf_counter() - query_start) * 1000, 3),
+                method="rule_based",
+                query=processed.query,
+                normalized_query=processed.normalized_query,
+                keywords=processed.keywords,
+                filters=combined_filters,
+            )
 
         dense_results: list[RetrievalResult] = []
         sparse_results: list[RetrievalResult] = []
         dense_error = False
         sparse_error = False
 
+        dense_start = perf_counter()
         try:
             dense_results = self.dense_retriever.retrieve(
                 processed.normalized_query or processed.query,
@@ -62,7 +75,17 @@ class HybridSearch:
             )
         except Exception:
             dense_error = True
+        if trace is not None:
+            trace.record_stage(
+                "dense_retrieval",
+                elapsed_ms=round((perf_counter() - dense_start) * 1000, 3),
+                method=getattr(self.dense_retriever, "__class__", type(self.dense_retriever)).__name__,
+                result_count=len(dense_results),
+                fallback=dense_error,
+                filters=combined_filters or None,
+            )
 
+        sparse_start = perf_counter()
         try:
             sparse_results = self.sparse_retriever.retrieve(
                 processed.keywords,
@@ -71,30 +94,38 @@ class HybridSearch:
             )
         except Exception:
             sparse_error = True
+        if trace is not None:
+            trace.record_stage(
+                "sparse_retrieval",
+                elapsed_ms=round((perf_counter() - sparse_start) * 1000, 3),
+                method=getattr(self.sparse_retriever, "__class__", type(self.sparse_retriever)).__name__,
+                result_count=len(sparse_results),
+                fallback=sparse_error,
+                keywords=processed.keywords,
+            )
 
+        fusion_start = perf_counter()
         if dense_results and sparse_results:
             candidates = self.fusion.fuse(dense_results, sparse_results, top_k=top_k)
+            fusion_method = getattr(self.fusion, "__class__", type(self.fusion)).__name__
         elif dense_results:
             candidates = dense_results
+            fusion_method = "dense_only"
         else:
             candidates = sparse_results
+            fusion_method = "sparse_only"
+        if trace is not None:
+            trace.record_stage(
+                "fusion",
+                elapsed_ms=round((perf_counter() - fusion_start) * 1000, 3),
+                method=fusion_method,
+                dense_count=len(dense_results),
+                sparse_count=len(sparse_results),
+                candidate_count=len(candidates),
+            )
 
         filtered = self._apply_metadata_filters(candidates, combined_filters)
         results = filtered[:top_k]
-
-        if trace is not None:
-            trace.record_stage(
-                "hybrid_search.search",
-                query=processed.query,
-                normalized_query=processed.normalized_query,
-                keywords=processed.keywords,
-                filters=combined_filters,
-                dense_count=len(dense_results),
-                sparse_count=len(sparse_results),
-                result_count=len(results),
-                dense_fallback=dense_error,
-                sparse_fallback=sparse_error,
-            )
 
         return results
 

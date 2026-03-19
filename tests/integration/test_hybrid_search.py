@@ -71,15 +71,22 @@ def test_hybrid_search_fuses_dense_and_sparse_results_with_filters(tmp_path: Pat
         sparse_retriever=sparse,
         fusion=RRFusion(k=60),
     )
-    trace = TraceContext()
+    trace = TraceContext(trace_type="query")
 
     results = search.search("collection:kb hybrid retrieval", top_k=3, trace=trace)
 
     assert [item.chunk_id for item in results] == ["chunk-1"]
     assert dense.calls == [("hybrid retrieval", 3, {"collection": "kb"})]
     assert sparse.calls == [(["hybrid", "retrieval"], 3)]
-    assert trace.stages[-1].name == "hybrid_search.search"
-    assert trace.stages[-1].details["result_count"] == 1
+    stage_names = [stage.name for stage in trace.stages]
+    assert stage_names == ["query_processing", "dense_retrieval", "sparse_retrieval", "fusion"]
+    assert trace.trace_type == "query"
+    assert trace.stages[0].details["method"] == "rule_based"
+    assert trace.stages[1].details["method"] == "StubDenseRetriever"
+    assert trace.stages[2].details["method"] == "StubSparseRetriever"
+    assert trace.stages[3].details["method"] == "RRFusion"
+    assert trace.stages[3].details["candidate_count"] == 2
+    assert all(stage.details["elapsed_ms"] >= 0 for stage in trace.stages)
 
 
 def test_hybrid_search_falls_back_to_sparse_when_dense_fails(tmp_path: Path) -> None:

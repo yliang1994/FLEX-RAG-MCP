@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from time import perf_counter
+
 from core.settings import Settings
 from core.trace.trace_context import TraceContext
 from core.types import QueryMatch, RetrievalResult
@@ -40,6 +42,7 @@ class Reranker:
             for candidate in candidates
         ]
 
+        started_at = perf_counter()
         try:
             reranked = self.backend.rerank(query, query_matches, trace=trace)
         except Exception as exc:
@@ -58,7 +61,9 @@ class Reranker:
 
         if trace is not None:
             trace.record_stage(
-                "reranker.rerank",
+                "rerank",
+                elapsed_ms=round((perf_counter() - started_at) * 1000, 3),
+                method=getattr(self.backend, "backend_name", "unknown"),
                 query=query,
                 candidate_count=len(candidates),
                 result_count=len(reranked_results),

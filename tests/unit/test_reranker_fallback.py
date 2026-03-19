@@ -64,7 +64,7 @@ def test_reranker_reorders_candidates_when_backend_succeeds(tmp_path: Path) -> N
 
 
 def test_reranker_returns_original_order_when_backend_raises(tmp_path: Path) -> None:
-    trace = TraceContext()
+    trace = TraceContext(trace_type="query")
     reranker = Reranker(_settings(tmp_path), backend=FailingBackend())
 
     results = reranker.rerank("query", _candidates(), trace=trace)
@@ -72,8 +72,10 @@ def test_reranker_returns_original_order_when_backend_raises(tmp_path: Path) -> 
     assert [item.chunk_id for item in results] == ["chunk-1", "chunk-2"]
     assert reranker.last_fallback is True
     assert reranker.last_fallback_reason == "backend_error:RuntimeError"
-    assert trace.stages[-1].name == "reranker.rerank"
+    assert trace.stages[-1].name == "rerank"
+    assert trace.stages[-1].details["method"] == "failing"
     assert trace.stages[-1].details["fallback"] is True
+    assert trace.stages[-1].details["elapsed_ms"] >= 0
 
 
 def test_reranker_returns_original_order_when_backend_returns_unknown_ids(tmp_path: Path) -> None:
