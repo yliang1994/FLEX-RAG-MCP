@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
-from typing import Any
+from typing import Any, Callable
 
 from core.settings import Settings
 from core.trace.trace_context import TraceContext
@@ -34,6 +34,9 @@ class PipelineResult:
     image_count: int = 0
     trace_id: str | None = None
     trace: TraceContext | None = None
+
+
+ProgressCallback = Callable[[str, int, int], None]
 
 
 class IngestionPipeline:
@@ -69,8 +72,15 @@ class IngestionPipeline:
         self.vector_upserter = vector_upserter or VectorUpserter(settings)
         self.image_storage = image_storage or ImageStorage()
 
-    def ingest(self, path: str | Path, collection: str = "default", force: bool = False) -> PipelineResult:
+    def run(
+        self,
+        path: str | Path,
+        collection: str = "default",
+        force: bool = False,
+        on_progress: ProgressCallback | None = None,
+    ) -> PipelineResult:
         trace = TraceContext(trace_type="ingestion")
+        total_stages = 5
         source_path = Path(path)
         if not source_path.exists():
             raise FileNotFoundError(f"input file not found: {source_path}")
@@ -100,6 +110,9 @@ class IngestionPipeline:
                     if isinstance(document.metadata.get("images", []), list)
                     else 0,
                 },
+                on_progress=on_progress,
+                current=1,
+                total=total_stages,
             )
             chunks = self._timed_stage(
                 trace,
@@ -107,6 +120,9 @@ class IngestionPipeline:
                 method=getattr(self.chunker.splitter, "__class__", type(self.chunker.splitter)).__name__,
                 callback=lambda: self.chunker.split_document(document),
                 details_factory=self._split_trace_details,
+                on_progress=on_progress,
+                current=2,
+                total=total_stages,
             )
             chunks = self._timed_stage(
                 trace,
@@ -117,6 +133,9 @@ class IngestionPipeline:
                     "chunk_count": len(transformed_chunks),
                     "steps": ["chunk_refiner", "metadata_enricher", "image_captioner"],
                 },
+                on_progress=on_progress,
+                current=3,
+                total=total_stages,
             )
             records = self._timed_stage(
                 trace,
@@ -127,6 +146,9 @@ class IngestionPipeline:
                     "record_count": len(encoded_records),
                     "batch_size": getattr(self.batch_processor, "batch_size", None),
                 },
+                on_progress=on_progress,
+                current=4,
+                total=total_stages,
             )
             upsert_result = self._timed_stage(
                 trace,
@@ -143,6 +165,9 @@ class IngestionPipeline:
                     "bm25_terms": payload["bm25_terms"],
                     "image_count": payload["image_count"],
                 },
+                on_progress=on_progress,
+                current=5,
+                total=total_stages,
             )
             image_count = upsert_result["image_count"]
             vector_ids = upsert_result["vector_ids"]
@@ -166,6 +191,15 @@ class IngestionPipeline:
             trace=trace,
         )
 
+    def ingest(
+        self,
+        path: str | Path,
+        collection: str = "default",
+        force: bool = False,
+        on_progress: ProgressCallback | None = None,
+    ) -> PipelineResult:
+        return self.run(path=path, collection=collection, force=force, on_progress=on_progress)
+
     def _timed_stage(
         self,
         trace: TraceContext,
@@ -174,6 +208,9 @@ class IngestionPipeline:
         method: str,
         callback,
         details_factory=None,
+        on_progress: ProgressCallback | None = None,
+        current: int | None = None,
+        total: int | None = None,
     ):
         started_at = perf_counter()
         try:
@@ -187,6 +224,8 @@ class IngestionPipeline:
             method=method,
             **details,
         )
+        if on_progress is not None and current is not None and total is not None:
+            on_progress(name, current, total)
         return result
 
     def _transform_chunks(self, chunks: list[Chunk], trace: TraceContext) -> list[Chunk]:

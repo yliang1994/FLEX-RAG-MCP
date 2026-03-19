@@ -2027,7 +2027,7 @@ dashboard:
 | F2 | 结构化日志 logger（JSON Lines） | [x] | 2026-03-19 | 已实现 JSONFormatter/get_trace_logger/write_trace，并补 JSONL 单元测试 |
 | F3 | 在 Query 链路打点 | [x] | 2026-03-19 | 已补 query_processing/dense_retrieval/sparse_retrieval/fusion/rerank 阶段、method 与 elapsed_ms 测试 |
 | F4 | 在 Ingestion 链路打点 | [x] | 2026-03-19 | 已补 load/split/transform/embed/upsert 阶段 trace、trace_type=ingestion 与集成测试 |
-| F5 | Pipeline 进度回调 (on_progress) | [ ] | | |
+| F5 | Pipeline 进度回调 (on_progress) | [x] | 2026-03-19 | 已新增 run()/ingest() 可选 on_progress 回调、顶层 5 阶段进度通知与单元测试 |
 
 #### 阶段 G：可视化管理平台 Dashboard
 
@@ -2071,11 +2071,11 @@ dashboard:
 | 阶段 C | 15 | 15 | 100% |
 | 阶段 D | 7 | 7 | 100% |
 | 阶段 E | 6 | 6 | 100% |
-| 阶段 F | 5 | 4 | 80% |
+| 阶段 F | 5 | 5 | 100% |
 | 阶段 G | 6 | 0 | 0% |
 | 阶段 H | 5 | 0 | 0% |
 | 阶段 I | 5 | 0 | 0% |
-| **总计** | **68** | **51** | **75.0%** |
+| **总计** | **68** | **52** | **76.5%** |
 
 
 ---

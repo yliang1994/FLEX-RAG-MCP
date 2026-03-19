@@ -45,7 +45,10 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"status": "error", "error": str(exc)}, ensure_ascii=True), file=sys.stderr)
         return 1
 
-    print(json.dumps(asdict(result), ensure_ascii=True))
+    payload = asdict(result)
+    if result.trace is not None:
+        payload["trace"] = result.trace.to_dict()
+    print(json.dumps(payload, ensure_ascii=True))
     return 0
 
 
